@@ -1,0 +1,19 @@
+{
+  "name": "@vynx/faceid",
+  "version": "1.0.0",
+  "description": "React Native SDK for Vynx FaceID integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-native": ">=0.70.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.16",
+    "@types/react-native": "^0.72.8",
+    "typescript": "^5.1.3"
+  }
+}
