@@ -6,7 +6,7 @@ A lightweight **React Native & TypeScript** wrapper module that enables develope
 
 ## 📦 Installation
 ```bash
-npm install @vynx/faceid
+npm install @vynxtechnology/faceid
 ```
 
 ---
@@ -16,7 +16,7 @@ Render the `FaceIDCamera` component in your layout. The SDK manages frame-rate c
 
 ```tsx
 import React from 'react';
-import { FaceIDCamera } from '@vynx/faceid';
+import { FaceIDCamera } from '@vynxtechnology/faceid';
 
 export default function BiometricScreen() {
   return (
