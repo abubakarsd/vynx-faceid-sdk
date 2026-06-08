@@ -30,8 +30,21 @@ export interface LivenessOptions {
 }
 
 export class FaceID {
+  public static readonly VERSION: string = '1.0.0';
   private static apiKey: string = '';
   private static endpoint: string = '';
+
+  /**
+   * Retrieves SDK version and product metadata.
+   */
+  static getVersionInfo() {
+    return {
+      version: this.VERSION,
+      framework: 'React Native',
+      description: 'Official React Native SDK for Vynx FaceID biometric identity systems.',
+      homepage: 'https://vynxfaceid.com',
+    };
+  }
 
   static initialize(config: FaceIDConfig): void {
     this.apiKey = config.apiKey;
