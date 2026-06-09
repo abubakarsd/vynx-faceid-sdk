@@ -45,6 +45,9 @@ export const FaceIDCamera = ({
   }, []);
 
   const startScanning = () => {
+    if (frameInterval.current) {
+      clearInterval(frameInterval.current);
+    }
     // Capture a frame every 1 second (1 FPS) for real-time face detection
     frameInterval.current = setInterval(async () => {
       if (!isScanning || loading) return;
