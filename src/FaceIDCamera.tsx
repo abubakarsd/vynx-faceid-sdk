@@ -59,7 +59,23 @@ export const FaceIDCamera = ({
         // 2. Call detect endpoint
         const detectedFaces = await detectFaceOnBackend(mockFrameBase64);
         
-        if (detectedFaces && detectedFaces.length > 0) {
+        if (detectedFaces && typeof detectedFaces === 'object' && 'rateLimited' in detectedFaces && detectedFaces.rateLimited) {
+          setFaceBbox(null);
+          setInstruction('Rate limit exceeded. Pausing scanning...');
+          // Stop current interval and temporarily disable scanning
+          if (frameInterval.current) {
+            clearInterval(frameInterval.current);
+          }
+          setIsScanning(false);
+          // Restart scanning after 5 seconds to let rate limit window cool down
+          setTimeout(() => {
+            setIsScanning(true);
+            startScanning();
+          }, 5000);
+          return;
+        }
+
+        if (Array.isArray(detectedFaces) && detectedFaces.length > 0) {
           const primaryFace = detectedFaces[0];
           setFaceBbox({
             x: primaryFace.x,
@@ -83,7 +99,7 @@ export const FaceIDCamera = ({
     }, 1000);
   };
 
-  const detectFaceOnBackend = async (base64Image: string) => {
+  const detectFaceOnBackend = async (base64Image: string): Promise<any> => {
     try {
       // Mock network response or make real fetch call
       const response = await fetch(`${apiEndpoint}/face/detect`, {
@@ -94,6 +110,16 @@ export const FaceIDCamera = ({
         },
         body: JSON.stringify({ image: base64Image }),
       });
+      
+      if (response.status === 429) {
+        const data = await response.json();
+        return { rateLimited: true, message: data.message || 'Rate limit exceeded' };
+      }
+
+      if (!response.ok) {
+        return null;
+      }
+
       const data = await response.json();
       return data.faces;
     } catch (e) {
